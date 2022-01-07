@@ -60,6 +60,23 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER 
         }]
     })
+    // construct multipulcation slash command
+    commands?.create({
+        name: "multiply",
+        description: "multiplies two numbers",
+        options: [{
+            name: "num1",
+            description: "first number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "num2",
+            description: "second number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        }]
+    })
     
 })
 
@@ -68,29 +85,40 @@ bot.on("interactionCreate", async interaction => {
     if (!interaction.isCommand) {
         return;
     }
-
     // implement slash commands
     const { commandName, options } = interaction;
 
+    // implement slash commands
     if (commandName === "add") {
         const num1 = await options.getNumber("num1");
         const num2 = await options.getNumber("num2");
-        interaction.reply({
-            content: `the sum is ${num1 + num2}`,
-            ephemeral: false
-        })
-    } else if (commandName === "subtract") {
-        const num1 = await options.getNumber("num1");
-        const num2 = await options.getNumber("num2");
-
-        // allows command to take greater than three seconds to execute
+        // allows the command to take greater than three seconds to execute
         await interaction.deferReply({
             ephemeral: false
         })
-
         // edit the reply to contain the answer once the command has finished executing
         interaction.editReply({
+            content: `the sum is ${num1 + num2}`
+        })
+
+    } else if (commandName === "subtract") {
+        const num1 = await options.getNumber("num1");
+        const num2 = await options.getNumber("num2");
+        await interaction.deferReply({
+            ephemeral: false
+        })
+        interaction.editReply({
             content: `the difference is ${num1 - num2}`
+        })
+        
+    } else if (commandName === "multiply") {
+        const num1 = await options.getNumber("num1");
+        const num2 = await options.getNumber("num2");
+        await interaction.deferReply({
+            ephemeral: false
+        })
+        interaction.editReply({
+            content: `the product is ${num1 * num2}`
         })
     }
 })
