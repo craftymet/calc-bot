@@ -16,11 +16,12 @@ const bot = new DiscordJS.Client({
 bot.on("ready", () => {
     // log the bot's username & tag to the console
     console.log(`logged in as ${bot.user.tag}`);
+    
     // set the bot's activity to be displayed as /help
-    bot.user.setActivity("/help", { type: "PLAYING" });
+    bot.user.setActivity("type '/' to get started", { type: "PLAYING" });
 
-    const guildID = "924047719306260500";
-    const guild = bot.guilds.cache.get(guildID);
+    // set the guild to a falsey value to enable commands to work globally
+    const guild = null
     let commands;
 
     // fetch required command based on value of guild 
@@ -100,7 +101,7 @@ bot.on("ready", () => {
     })
     // construct % of slash command
     commands?.create({
-        name: "percent",
+        name: "percentage_of",
         description: "calculates percentage of",
         options: [{
             name: "percent",
@@ -170,7 +171,7 @@ bot.on("interactionCreate", async interaction => {
             content: `the quotient is ${num1 / num2}`
         })
 
-    } else if (commandName === "percent") {
+    } else if (commandName === "percentage_of") {
         const num1 = await options.getNumber("percent");
         const num2 = await options.getNumber("num1");
         // percentage of = % / 100 * num
@@ -183,7 +184,6 @@ bot.on("interactionCreate", async interaction => {
         })
     }
 })
-
 
 // login to discord using the bot token
 bot.login(process.env.TOKEN);
