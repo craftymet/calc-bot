@@ -21,7 +21,8 @@ bot.on("ready", () => {
     bot.user.setActivity("/help", { type: "PLAYING" });
 
     // set the guild to a falsey value to enable global commands
-    const guild = null;
+    const guildID = "924047719306260500";
+    const guild = bot.guilds.cache.get(guildID);
     let commands;
 
     // fetch required commands based on value of guild 
@@ -34,7 +35,7 @@ bot.on("ready", () => {
     // construct addition slash command
     commands?.create({
         name: "add",
-        description: "adds two values",
+        description: "adds two numbers",
         options: [{
             name: "num1",
             description: "first number",
@@ -116,10 +117,10 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
     })
-    // construct help command
+    // construct help slash command
     commands?.create({
         name: "help",
-        description: "describes how to use the bot",
+        description: "describes how to interact with Calc",
     })
 })
 
@@ -130,7 +131,6 @@ bot.on("interactionCreate", async interaction => {
     if (!interaction.isCommand) {
         return;
     }
-    // implement slash commands
     const { commandName, options } = interaction;
 
     // define logic for slash commands
@@ -143,7 +143,7 @@ bot.on("interactionCreate", async interaction => {
         })
         // edit the reply to contain the answer once the command has finished executing
         interaction.editReply({
-            content: `the sum is ${num1 + num2}`
+            content: `(${num1}) + (${num2}) = (${num1 + num2})`
         })
 
     } else if (commandName === "subtract") {
@@ -153,7 +153,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `the difference is ${num1 - num2}`
+            content: `(${num1}) - (${num2}) = (${num1 - num2})`
         })
 
     } else if (commandName === "multiply") {
@@ -163,7 +163,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `the product is ${num1 * num2}`
+            content: `(${num1}) x (${num2}) = (${num1 * num2})`
         })
 
     } else if (commandName === "divide") {
@@ -173,7 +173,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `the quotient is ${num1 / num2}`
+            content: `(${num1}) / (${num2}) = (${num1 / num2})`
         })
 
     } else if (commandName === "percentage_of") {
@@ -185,7 +185,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `${num1}% of ${num2} is ${i * num2}`
+            content: `(${num1}%) of (${num2}) is (${i * num2})`
         })
 
     } else if (commandName === "help") {
