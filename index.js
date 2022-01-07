@@ -16,13 +16,17 @@ const bot = new DiscordJS.Client({
 bot.on("ready", () => {
     // log the bot's username & tag to the console
     console.log(`logged in as ${bot.user.tag}`);
-
+    
     // set the bot's activity to be displayed as /help
     bot.user.setActivity("/help", { type: "PLAYING" });
 
     // set the guild to a falsey value to enable global commands
-    const guildID = "924047719306260500";
-    const guild = bot.guilds.cache.get(guildID);
+    const guild = null
+
+    // prevent slash commands from duplicating unexpectedly
+    bot.application.commands.set([])
+    
+    // where fetched commands will be saved to
     let commands;
 
     // fetch required commands based on value of guild 
