@@ -73,16 +73,24 @@ bot.on("interactionCreate", async interaction => {
     const { commandName, options } = interaction;
 
     if (commandName === "add") {
-        const num1 = await options.getNumber("num1")
-        const num2 = await options.getNumber("num2") 
+        const num1 = await options.getNumber("num1");
+        const num2 = await options.getNumber("num2");
         interaction.reply({
             content: `the sum is ${num1 + num2}`,
             ephemeral: false
         })
     } else if (commandName === "subtract") {
-        await interaction.reply({
-            contesnt: `the difference is ${num1 - num2}`,
+        const num1 = await options.getNumber("num1");
+        const num2 = await options.getNumber("num2");
+
+        // allows command to take greater than three seconds to execute
+        await interaction.deferReply({
             ephemeral: false
+        })
+
+        // edit the reply to contain the answer once the command has finished executing
+        interaction.editReply({
+            content: `the difference is ${num1 - num2}`
         })
     }
 })
