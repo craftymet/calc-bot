@@ -11,6 +11,7 @@ const bot = new DiscordJS.Client({
     ]
 })
 
+
 // run when client is ready
 bot.on("ready", () => {
     console.log(`logged in as ${bot.user.tag}`);
@@ -77,9 +78,28 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
     })
+    // construct division slash command
+    commands?.create({
+        name: "divide",
+        description: "divides two numbers",
+        options: [{
+            name: "num1",
+            description: "first number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "num2",
+            description: "second number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        }]
+    })
     
 })
 
+
+// implement slash commands
 bot.on("interactionCreate", async interaction => {
     // return if interaction is not a command
     if (!interaction.isCommand) {
@@ -88,7 +108,7 @@ bot.on("interactionCreate", async interaction => {
     // implement slash commands
     const { commandName, options } = interaction;
 
-    // implement slash commands
+    // define logic for slash commands
     if (commandName === "add") {
         const num1 = await options.getNumber("num1");
         const num2 = await options.getNumber("num2");
@@ -110,7 +130,7 @@ bot.on("interactionCreate", async interaction => {
         interaction.editReply({
             content: `the difference is ${num1 - num2}`
         })
-        
+
     } else if (commandName === "multiply") {
         const num1 = await options.getNumber("num1");
         const num2 = await options.getNumber("num2");
@@ -120,7 +140,19 @@ bot.on("interactionCreate", async interaction => {
         interaction.editReply({
             content: `the product is ${num1 * num2}`
         })
+
+    } else if (commandName === "divide") {
+        const num1 = await options.getNumber("num1");
+        const num2 = await options.getNumber("num2");
+        await interaction.deferReply({
+            ephemeral: false
+        })
+        interaction.editReply({
+            content: `the quotient is ${num1 / num2}`
+        })
     }
 })
+
+
 // login to discord using the bot token
 bot.login(process.env.TOKEN);
