@@ -16,15 +16,15 @@ const bot = new DiscordJS.Client({
 bot.on("ready", () => {
     // log the bot's username & tag to the console
     console.log(`logged in as ${bot.user.tag}`);
-    
-    // set the bot's activity to be displayed as /help
-    bot.user.setActivity("type '/' to get started", { type: "PLAYING" });
 
-    // set the guild to a falsey value to enable commands to work globally
-    const guild = null
+    // set the bot's activity to be displayed as /help
+    bot.user.setActivity("/help", { type: "PLAYING" });
+
+    // set the guild to a falsey value to enable global commands
+    const guild = null;
     let commands;
 
-    // fetch required command based on value of guild 
+    // fetch required commands based on value of guild 
     if (guild) {
         commands = guild.commands;
     } else {
@@ -116,6 +116,11 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
     })
+    // construct help command
+    commands?.create({
+        name: "help",
+        description: "describes how to use the bot",
+    })
 })
 
 
@@ -181,6 +186,14 @@ bot.on("interactionCreate", async interaction => {
         })
         interaction.editReply({
             content: `${num1}% of ${num2} is ${i * num2}`
+        })
+
+    } else if (commandName === "help") {
+        await interaction.deferReply({
+            ephemeral: false
+        })
+        interaction.editReply({
+            content: "All of Calc's commands are run via slash commands: type '/' to get started"
         })
     }
 })
