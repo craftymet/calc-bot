@@ -95,7 +95,23 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
     })
-    
+    // construct % of slash command
+    commands?.create({
+        name: "percent",
+        description: "calculates percentage of",
+        options: [{
+            name: "percent",
+            description: "percent, write without including the % symbol",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "num1",
+            description: "the number you're calculating the percentage of",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        }]
+    })
 })
 
 
@@ -149,6 +165,18 @@ bot.on("interactionCreate", async interaction => {
         })
         interaction.editReply({
             content: `the quotient is ${num1 / num2}`
+        })
+
+    } else if (commandName === "percent") {
+        const num1 = await options.getNumber("percent");
+        const num2 = await options.getNumber("num1");
+        // percentage of = % / 100 * num
+        let i = num1 / 100;
+        await interaction.deferReply({
+            ephemeral: false
+        })
+        interaction.editReply({
+            content: `${num1}% of ${num2} is ${i * num2}`
         })
     }
 })
