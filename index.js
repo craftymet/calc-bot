@@ -24,7 +24,7 @@ bot.on("ready", () => {
     const guild = null
 
     // prevent slash commands from duplicating unexpectedly
-    
+    bot.application.commands.set([])
     
     // where fetched commands will be saved to
     let commands;
@@ -124,7 +124,7 @@ bot.on("ready", () => {
     // construct help slash command
     commands?.create({
         name: "help",
-        description: "describes how to interact with Calc"
+        description: "describes how to interact with Calc",
     })
 })
 
@@ -147,7 +147,7 @@ bot.on("interactionCreate", async interaction => {
         })
         // edit the reply to contain the answer once the command has finished executing
         interaction.editReply({
-            content: `(${num1}) + (${num2}) = **(${num1 + num2})**`
+            content: `(${num1}) + (${num2}) = (${num1 + num2})`
         })
 
     } else if (commandName === "subtract") {
@@ -157,7 +157,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) - (${num2}) = **(${num1 - num2})**`
+            content: `(${num1}) - (${num2}) = (${num1 - num2})`
         })
 
     } else if (commandName === "multiply") {
@@ -167,7 +167,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) x (${num2}) = **(${num1 * num2})**`
+            content: `(${num1}) x (${num2}) = (${num1 * num2})`
         })
 
     } else if (commandName === "divide") {
@@ -177,7 +177,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) / (${num2}) = **(${num1 / num2})**`
+            content: `(${num1}) / (${num2}) = (${num1 / num2})`
         })
 
     } else if (commandName === "percentage_of") {
@@ -189,7 +189,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}%) of (${num2}) is **(${i * num2})**`
+            content: `(${num1}%) of (${num2}) is (${i * num2})`
         })
 
     } else if (commandName === "help") {
