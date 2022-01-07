@@ -26,10 +26,10 @@ bot.on("ready", () => {
         commands = bot.application?.commands;
     }
 
-    // create addition slash command
+    // construct addition slash command
     commands?.create({
         name: "add",
-        description: "adds two values together",
+        description: "adds two values",
         options: [{
             name: "num1",
             description: "first number",
@@ -43,9 +43,48 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
     })
+    // construct subtraction slash command
+    commands?.create({
+        name: "subtract",
+        description: "subtracts two numbers",
+        options: [{
+            name: "num1",
+            description: "first number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "num2",
+            description: "second number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER 
+        }]
+    })
     
 })
 
+bot.on("interactionCreate", async interaction => {
+    // return if interaction is not a command
+    if (!interaction.isCommand) {
+        return;
+    }
 
+    // implement slash commands
+    const { commandName, options } = interaction;
+
+    if (commandName === "add") {
+        const num1 = await options.getNumber("num1")
+        const num2 = await options.getNumber("num2") 
+        interaction.reply({
+            content: `the sum is ${num1 + num2}`,
+            ephemeral: false
+        })
+    } else if (commandName === "subtract") {
+        await interaction.reply({
+            contesnt: `the difference is ${num1 - num2}`,
+            ephemeral: false
+        })
+    }
+})
 // login to discord using the bot token
 bot.login(process.env.TOKEN);
