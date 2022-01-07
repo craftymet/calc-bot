@@ -9,3 +9,4 @@ features:
 - calculating percentage of
 
 invite link:
+https://discord.com/api/oauth2/authorize?client_id=928821139751436318&permissions=2147486720&scope=bot%20applications.commands
