@@ -1,7 +1,7 @@
 # calc-bot
 discord.js bot designed for performing basic arithmetic
 
-v1.00
+v1.1.0
 
 features:
 - addition
