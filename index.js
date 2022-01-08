@@ -21,10 +21,10 @@ bot.on("ready", () => {
     bot.user.setActivity("/help", { type: "PLAYING" });
 
     // set the guild to a falsey value to enable global commands
-    const guild = null
+    const guild = null;
 
     // prevent slash commands from duplicating unexpectedly
-    bot.application.commands.set([])
+    bot.application.commands.set([]);
     
     // where fetched commands will be saved to
     let commands;
@@ -139,57 +139,57 @@ bot.on("interactionCreate", async interaction => {
 
     // define logic for slash commands
     if (commandName === "add") {
-        const num1 = await options.getNumber("num1");
-        const num2 = await options.getNumber("num2");
+        const num1 = await options.getNumber("num1") || 0
+        const num2 = await options.getNumber("num2") || 0
         // allows the command to take greater than three seconds to execute
         await interaction.deferReply({
             ephemeral: false
         })
         // edit the reply to contain the answer once the command has finished executing
         interaction.editReply({
-            content: `(${num1}) + (${num2}) = (${num1 + num2})`
+            content: `(${num1}) + (${num2}) = **(${num1 + num2})**`
         })
 
     } else if (commandName === "subtract") {
-        const num1 = await options.getNumber("num1");
-        const num2 = await options.getNumber("num2");
+        const num1 = await options.getNumber("num1") || 0
+        const num2 = await options.getNumber("num2") || 0
         await interaction.deferReply({
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) - (${num2}) = (${num1 - num2})`
+            content: `(${num1}) - (${num2}) = **(${num1 - num2})**`
         })
 
     } else if (commandName === "multiply") {
-        const num1 = await options.getNumber("num1");
-        const num2 = await options.getNumber("num2");
+        const num1 = await options.getNumber("num1") || 0
+        const num2 = await options.getNumber("num2") || 0
         await interaction.deferReply({
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) x (${num2}) = (${num1 * num2})`
+            content: `(${num1}) x (${num2}) = **(${num1 * num2})**`
         })
 
     } else if (commandName === "divide") {
-        const num1 = await options.getNumber("num1");
-        const num2 = await options.getNumber("num2");
+        const num1 = await options.getNumber("num1") || 0
+        const num2 = await options.getNumber("num2") || 0
         await interaction.deferReply({
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) / (${num2}) = (${num1 / num2})`
+            content: `(${num1}) / (${num2}) = **${num1 / num2})**`
         })
 
     } else if (commandName === "percentage_of") {
-        const num1 = await options.getNumber("percent");
-        const num2 = await options.getNumber("num1");
+        const num1 = await options.getNumber("percent") || 0
+        const num2 = await options.getNumber("num1") || 0
         // percentage of = % / 100 * num
         let i = num1 / 100;
         await interaction.deferReply({
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}%) of (${num2}) is (${i * num2})`
+            content: `(${num1}%) of (${num2}) is **(${i * num2})**`
         })
 
     } else if (commandName === "help") {
@@ -197,7 +197,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: "All of Calc's commands are run via slash commands: type '/' to get started"
+            content: "All of Calc's commands are run via slash commands: type **'/'** to get started"
         })
     }
 })
