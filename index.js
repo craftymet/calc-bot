@@ -1,4 +1,4 @@
-// import the required modules
+// import the required modules/files
 DiscordJS = require('discord.js');
 const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
