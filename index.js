@@ -1,6 +1,6 @@
 // import the required modules
 DiscordJS = require('discord.js');
-// const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
 
 // create a new bot instance & declare intents
@@ -21,7 +21,7 @@ bot.on("ready", () => {
     bot.user.setActivity("/help", { type: "PLAYING" });
 
     // set the guild to a falsey value to enable global commands
-    const guild = null;
+    const guild = 0;
 
     // prevent slash commands from duplicating unexpectedly
     bot.application.commands.set([]);
@@ -203,4 +203,4 @@ bot.on("interactionCreate", async interaction => {
 })
 
 // login to discord using the bot token
-bot.login(process.env.DJS_TOKEN);
+bot.login(process.env.TOKEN);
