@@ -203,4 +203,4 @@ bot.on("interactionCreate", async interaction => {
 })
 
 // login to discord using the bot token
-bot.login(process.env.TOKEN);
+bot.login(process.env.DJS_TOKEN);
