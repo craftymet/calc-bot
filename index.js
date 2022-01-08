@@ -1,7 +1,8 @@
 // import the required modules/files
-DiscordJS = require('discord.js');
+const DiscordJS = require('discord.js');
 const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
+const helpEmbed = require('./embed');
 
 // create a new bot instance & declare intents
 const bot = new DiscordJS.Client({
@@ -21,10 +22,10 @@ bot.on("ready", () => {
     bot.user.setActivity("/help", { type: "PLAYING" });
 
     // set the guild to a falsey value to enable global commands
-    const guild = 0;
-
-    // prevent slash commands from duplicating unexpectedly
-    bot.application.commands.set([]);
+    const guild = false;
+    
+    // reset commands to prevent unexpected duplicates
+    // bot.application.commands.set([]);
     
     // where fetched commands will be saved to
     let commands;
@@ -146,7 +147,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         // edit the reply to contain the answer once the command has finished executing
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) + (${num2}) = **(${num1 + num2})**`
         })
 
@@ -156,7 +157,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) - (${num2}) = **(${num1 - num2})**`
         })
 
@@ -166,7 +167,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) x (${num2}) = **(${num1 * num2})**`
         })
 
@@ -176,7 +177,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) / (${num2}) = **(${num1 / num2})**`
         })
 
@@ -188,7 +189,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}%) of (${num2}) is **(${i * num2})**`
         })
 
@@ -196,8 +197,8 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
-            content: "All of Calc's commands are run via slash commands: type **'/'** to get started"
+        await interaction.editReply({
+            embeds: [helpEmbed] 
         })
     }
 })
