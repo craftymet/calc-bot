@@ -177,7 +177,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         interaction.editReply({
-            content: `(${num1}) / (${num2}) = **${num1 / num2})**`
+            content: `(${num1}) / (${num2}) = **(${num1 / num2})**`
         })
 
     } else if (commandName === "percentage_of") {
@@ -203,4 +203,4 @@ bot.on("interactionCreate", async interaction => {
 })
 
 // login to discord using the bot token
-bot.login(process.env.DJS_TOKEN);
+bot.login(process.env.TOKEN);
