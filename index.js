@@ -1,7 +1,8 @@
 // import the required modules/files
-DiscordJS = require('discord.js');
+const DiscordJS = require('discord.js');
 const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
+const { MessageEmbed } = require('discord.js');
 
 // create a new bot instance & declare intents
 const bot = new DiscordJS.Client({
@@ -21,9 +22,9 @@ bot.on("ready", () => {
     bot.user.setActivity("/help", { type: "PLAYING" });
 
     // set the guild to a falsey value to enable global commands
-    const guild = 0;
-
-    // prevent slash commands from duplicating unexpectedly
+    const guild = false;
+    
+    // reset commands to prevent unexpected duplicates
     bot.application.commands.set([]);
     
     // where fetched commands will be saved to
@@ -146,7 +147,7 @@ bot.on("interactionCreate", async interaction => {
             ephemeral: false
         })
         // edit the reply to contain the answer once the command has finished executing
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) + (${num2}) = **(${num1 + num2})**`
         })
 
@@ -156,7 +157,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) - (${num2}) = **(${num1 - num2})**`
         })
 
@@ -166,7 +167,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) x (${num2}) = **(${num1 * num2})**`
         })
 
@@ -176,7 +177,7 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}) / (${num2}) = **(${num1 / num2})**`
         })
 
@@ -188,16 +189,31 @@ bot.on("interactionCreate", async interaction => {
         await interaction.deferReply({
             ephemeral: false
         })
-        interaction.editReply({
+        await interaction.editReply({
             content: `(${num1}%) of (${num2}) is **(${i * num2})**`
         })
 
     } else if (commandName === "help") {
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        interaction.editReply({
-            content: "All of Calc's commands are run via slash commands: type **'/'** to get started"
+        // create new embed
+        const helpEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle("Calc 101")
+        .setDescription("Calc is a Discord bot designed to perform simple arithmetic")
+        .addFields(
+            {name: "\u200B", value: "\n\u200b"},
+            {name: "Calling commands", value: "Calc utilizes Discord slash commands for each of it's commands, see the following list for an overview of each command"},
+            {name: "/add", value: "adds two numbers", inline: true},
+            {name: "/subtract", value: "subtracts two numbers", inline: true},
+            {name: "/multiply", value: "multiplies two numbers", inline: true},
+            {name: "/divide", value: "divides two numbers", inline: true},
+            {name: "/percentage_of", value: "calculates the percentage of a number", inline: true}
+        )
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+        .setImage("https://i.postimg.cc/Kjy5Mnc8/Calc-bot-banner.png")
+
+        await interaction.reply({
+            embeds: [helpEmbed] 
         })
     }
 })
