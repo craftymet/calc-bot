@@ -2,7 +2,7 @@
 const DiscordJS = require('discord.js');
 const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
-const helpEmbed = require('./embed');
+const { MessageEmbed } = require('discord.js');
 
 // create a new bot instance & declare intents
 const bot = new DiscordJS.Client({
@@ -25,7 +25,7 @@ bot.on("ready", () => {
     const guild = false;
     
     // reset commands to prevent unexpected duplicates
-    // bot.application.commands.set([]);
+    bot.application.commands.set([]);
     
     // where fetched commands will be saved to
     let commands;
@@ -194,10 +194,13 @@ bot.on("interactionCreate", async interaction => {
         })
 
     } else if (commandName === "help") {
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        await interaction.editReply({
+        // create new embed
+        const helpEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle("Calc 101")
+        .setDescription("Calc is a Discord bot designed to perform simple arithmetic")
+
+        await interaction.reply({
             embeds: [helpEmbed] 
         })
     }
