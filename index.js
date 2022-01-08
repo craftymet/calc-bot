@@ -1,6 +1,6 @@
 // import the required modules
 DiscordJS = require('discord.js');
-const dotenv = require('dotenv').config();
+// const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
 
 // create a new bot instance & declare intents
