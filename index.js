@@ -127,6 +127,23 @@ bot.on("ready", () => {
         name: "help",
         description: "describes how to interact with Calc",
     })
+    // construct square root slash command
+    commands?.create({
+        name: "square_root",
+        description: "finds the square root of a number",
+        options: [{
+            name: "num1",
+            description: "the number you're calculating the square root of",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "round_to_nearest_int",
+            description: "determines whether the answer is rounded to the nearest integer, write either true or false",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }]
+    })
 })
 
 
@@ -234,6 +251,37 @@ bot.on("interactionCreate", async interaction => {
         await interaction.reply({
             embeds: [helpEmbed] 
         })
+
+    } else if (commandName === "square_root") {
+        const num1 = await options.getNumber("num1") || 0
+        const num2 = await options.getBoolean("round_to_nearest_int") || 0
+        const sqrtOfNum1 = await Math.sqrt(num1);
+
+        // embed for returing square root
+        const square_rootEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`the square root of ${num1} is ${sqrtOfNum1}`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        // embed for returning square root rounded to the nearest integer
+        const square_root_roundEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`the square root of ${num1} rounded to the nearest integer is ${Math.round(sqrtOfNum1)}`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        // if round_to_nearest_int is true
+        if (num2) {
+            await interaction.reply({
+                embeds: [square_root_roundEmbed]
+            })
+        // if round_to_nearest_int is false
+        } else {
+            await interaction.reply({
+                embeds: [square_rootEmbed]
+            })
+        }
     }
 })
 
