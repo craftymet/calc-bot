@@ -142,59 +142,78 @@ bot.on("interactionCreate", async interaction => {
     if (commandName === "add") {
         const num1 = await options.getNumber("num1") || 0
         const num2 = await options.getNumber("num2") || 0
-        // allows the command to take greater than three seconds to execute
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        // edit the reply to contain the answer once the command has finished executing
-        await interaction.editReply({
-            content: `(${num1}) + (${num2}) = **(${num1 + num2})**`
+
+        // create embed
+        const addEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`(${num1}) + (${num2}) = *(${num1 + num2})*`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        // reply to the slash command with the embed
+        await interaction.reply({
+            embeds: [addEmbed]
         })
 
     } else if (commandName === "subtract") {
         const num1 = await options.getNumber("num1") || 0
         const num2 = await options.getNumber("num2") || 0
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        await interaction.editReply({
-            content: `(${num1}) - (${num2}) = **(${num1 - num2})**`
+        
+        const subtractEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`(${num1}) - (${num2}) = *(${num1 - num2})*`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        await interaction.reply({
+            embeds: [subtractEmbed]
         })
 
     } else if (commandName === "multiply") {
         const num1 = await options.getNumber("num1") || 0
         const num2 = await options.getNumber("num2") || 0
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        await interaction.editReply({
-            content: `(${num1}) x (${num2}) = **(${num1 * num2})**`
+        
+        const multiplyEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`(${num1}) x (${num2}) = *(${num1 * num2})*`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        await interaction.reply({
+            embeds: [multiplyEmbed]
         })
 
     } else if (commandName === "divide") {
         const num1 = await options.getNumber("num1") || 0
         const num2 = await options.getNumber("num2") || 0
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        await interaction.editReply({
-            content: `(${num1}) / (${num2}) = **(${num1 / num2})**`
+        
+        const devideEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`(${num1}) / (${num2}) = *(${num1 / num2})*`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        await interaction.reply({
+            embeds: [devideEmbed]
         })
 
     } else if (commandName === "percentage_of") {
         const num1 = await options.getNumber("percent") || 0
         const num2 = await options.getNumber("num1") || 0
         // percentage of = % / 100 * num
-        let i = num1 / 100;
-        await interaction.deferReply({
-            ephemeral: false
-        })
-        await interaction.editReply({
-            content: `(${num1}%) of (${num2}) is **(${i * num2})**`
+        const i = num1 / 100;
+        
+        const percentageOfEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`(${num1}%) of (${num2}) is *(${i * num2})*`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        await interaction.reply({
+            embeds: [percentageOfEmbed]
         })
 
     } else if (commandName === "help") {
-        // create new embed
         const helpEmbed = new MessageEmbed()
         .setColor("#5CD4D8")
         .setTitle("Calc 101")
