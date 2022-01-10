@@ -144,6 +144,23 @@ bot.on("ready", () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.BOOLEAN
         }]
     })
+    // construct powers slash command
+    commands?.create({
+        name: "power",
+        description: "returns the base to the exponent",
+        options: [{
+            name: "base",
+            description: "the base number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "exponent",
+            description: "the exponent",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        }]
+    })
 })
 
 
@@ -243,7 +260,8 @@ bot.on("interactionCreate", async interaction => {
             {name: "/multiply", value: "multiplies two numbers", inline: true},
             {name: "/divide", value: "divides two numbers", inline: true},
             {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
-            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true}
+            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true},
+            {name: "/power", value: "returns the base raised to the power", inline: true}
         )
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
@@ -262,17 +280,17 @@ bot.on("interactionCreate", async interaction => {
         // embed for returning the square root
         const square_rootEmbed = new MessageEmbed()
         .setColor("#5CD4D8")
-        .setTitle(`the square root of (${num1}) is (${sqrtOfNum1})`)
+        .setTitle(`the square root of (${num1}) is *(${sqrtOfNum1})*`)
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
         // embed for returning the square root rounded to the nearest integer
         const square_root_roundedEmbed = new MessageEmbed()
         .setColor("#5CD4D8")
-        .setTitle(`the square root of (${num1}) rounded to the nearest integer is (${Math.round(sqrtOfNum1)})`)
+        .setTitle(`the square root of (${num1}) rounded to the nearest integer is *(${Math.round(sqrtOfNum1)})*`)
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-
+        
         // if round_to_nearest_int is true
         if (num2) {
             await interaction.reply({
@@ -284,6 +302,20 @@ bot.on("interactionCreate", async interaction => {
                 embeds: [square_rootEmbed]
             })
         }
+
+    } else if (commandName === "power") {
+        const num1 = await options.getNumber("base") || 0
+        const num2 = await options.getNumber("exponent") || 0
+
+        const powerEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`(${num1}) raised to the power (${num2}) is *(${Math.pow(num1, num2)})*`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        await interaction.reply({
+            embeds: [powerEmbed] 
+        })
     }
 })
 
