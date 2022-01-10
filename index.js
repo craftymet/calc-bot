@@ -139,7 +139,7 @@ bot.on("ready", () => {
         },
         {
             name: "round_to_nearest_int",
-            description: "determines whether the answer is rounded to the nearest integer, write either true or false",
+            description: "determines whether the answer is rounded to the nearest integer, select either true or false",
             required: true,
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.BOOLEAN
         }]
@@ -242,7 +242,8 @@ bot.on("interactionCreate", async interaction => {
             {name: "/subtract", value: "subtracts two numbers", inline: true},
             {name: "/multiply", value: "multiplies two numbers", inline: true},
             {name: "/divide", value: "divides two numbers", inline: true},
-            {name: "/percentage_of", value: "calculates the percentage of a number", inline: true}
+            {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
+            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true}
         )
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
@@ -265,16 +266,16 @@ bot.on("interactionCreate", async interaction => {
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
         // embed for returning square root rounded to the nearest integer
-        const square_root_roundEmbed = new MessageEmbed()
+        const square_root_roundedEmbed = new MessageEmbed()
         .setColor("#5CD4D8")
-        .setTitle(`the square root of ${num1} rounded to the nearest integer is ${Math.round(sqrtOfNum1)}`)
+        .setTitle(`the square root of (${num1}) rounded to the nearest integer is (${Math.round(sqrtOfNum1)})`)
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
         // if round_to_nearest_int is true
         if (num2) {
             await interaction.reply({
-                embeds: [square_root_roundEmbed]
+                embeds: [square_root_roundedEmbed]
             })
         // if round_to_nearest_int is false
         } else {
