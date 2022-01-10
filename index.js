@@ -260,7 +260,8 @@ bot.on("interactionCreate", async interaction => {
             {name: "/multiply", value: "multiplies two numbers", inline: true},
             {name: "/divide", value: "divides two numbers", inline: true},
             {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
-            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true}
+            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true},
+            {name: "/power", value: "returns the base raised to the power", inline: true}
         )
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
