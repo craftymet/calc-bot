@@ -3,6 +3,7 @@ const DiscordJS = require('discord.js');
 const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
 const { MessageEmbed } = require('discord.js');
+const mongo = require('./mongo');
 
 // create a new bot instance & declare intents
 const bot = new DiscordJS.Client({
@@ -14,10 +15,20 @@ const bot = new DiscordJS.Client({
 
 
 // run when client is ready
-bot.on("ready", () => {
+bot.on("ready", async () => {
     // log the bot's username & tag to the console
     console.log(`logged in as ${bot.user.tag}`);
     
+    // connect to mongo database
+    await mongo().then(mongoose => {
+        try {
+            console.log("connected to mongo")
+        // finally will always run no matter the result of the try statement
+        } finally {
+            mongoose.connection.close();
+        }
+    })
+
     // set the bot's activity to be displayed as /help
     bot.user.setActivity("/help", { type: "PLAYING" });
 
