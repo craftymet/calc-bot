@@ -256,16 +256,17 @@ bot.on("interactionCreate", async interaction => {
     } else if (commandName === "square_root") {
         const num1 = await options.getNumber("num1") || 0
         const num2 = await options.getBoolean("round_to_nearest_int") || 0
+        // calculate the square root of num1
         const sqrtOfNum1 = await Math.sqrt(num1);
 
-        // embed for returing square root
+        // embed for returning the square root
         const square_rootEmbed = new MessageEmbed()
         .setColor("#5CD4D8")
-        .setTitle(`the square root of ${num1} is ${sqrtOfNum1}`)
+        .setTitle(`the square root of (${num1}) is (${sqrtOfNum1})`)
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
-        // embed for returning square root rounded to the nearest integer
+        // embed for returning the square root rounded to the nearest integer
         const square_root_roundedEmbed = new MessageEmbed()
         .setColor("#5CD4D8")
         .setTitle(`the square root of (${num1}) rounded to the nearest integer is (${Math.round(sqrtOfNum1)})`)
