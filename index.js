@@ -127,6 +127,23 @@ bot.on("ready", () => {
         name: "help",
         description: "describes how to interact with Calc",
     })
+    // construct square root slash command
+    commands?.create({
+        name: "square_root",
+        description: "finds the square root of a number",
+        options: [{
+            name: "num1",
+            description: "the number you're calculating the square root of",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "round_to_nearest_int",
+            description: "determines whether the answer is rounded to the nearest integer, select either true or false",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.BOOLEAN
+        }]
+    })
 })
 
 
@@ -225,7 +242,8 @@ bot.on("interactionCreate", async interaction => {
             {name: "/subtract", value: "subtracts two numbers", inline: true},
             {name: "/multiply", value: "multiplies two numbers", inline: true},
             {name: "/divide", value: "divides two numbers", inline: true},
-            {name: "/percentage_of", value: "calculates the percentage of a number", inline: true}
+            {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
+            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true}
         )
         .setTimestamp()
         .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
@@ -234,6 +252,38 @@ bot.on("interactionCreate", async interaction => {
         await interaction.reply({
             embeds: [helpEmbed] 
         })
+
+    } else if (commandName === "square_root") {
+        const num1 = await options.getNumber("num1") || 0
+        const num2 = await options.getBoolean("round_to_nearest_int") || 0
+        // calculate the square root of num1
+        const sqrtOfNum1 = await Math.sqrt(num1);
+
+        // embed for returning the square root
+        const square_rootEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`the square root of (${num1}) is (${sqrtOfNum1})`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        // embed for returning the square root rounded to the nearest integer
+        const square_root_roundedEmbed = new MessageEmbed()
+        .setColor("#5CD4D8")
+        .setTitle(`the square root of (${num1}) rounded to the nearest integer is (${Math.round(sqrtOfNum1)})`)
+        .setTimestamp()
+        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+        // if round_to_nearest_int is true
+        if (num2) {
+            await interaction.reply({
+                embeds: [square_root_roundedEmbed]
+            })
+        // if round_to_nearest_int is false
+        } else {
+            await interaction.reply({
+                embeds: [square_rootEmbed]
+            })
+        }
     }
 })
 
