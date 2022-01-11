@@ -3,7 +3,6 @@ const DiscordJS = require('discord.js');
 const dotenv = require('dotenv').config();
 const { intents } = DiscordJS;
 const { MessageEmbed } = require('discord.js');
-const mongo = require('./mongo');
 
 // create a new bot instance & declare intents
 const bot = new DiscordJS.Client({
@@ -18,16 +17,6 @@ const bot = new DiscordJS.Client({
 bot.on("ready", async () => {
     // log the bot's username & tag to the console
     console.log(`logged in as ${bot.user.tag}`);
-    
-    // connect to mongo database
-    await mongo().then(mongoose => {
-        try {
-            console.log("connected to mongo")
-        // finally will always run no matter the result of the try statement
-        } finally {
-            mongoose.connection.close();
-        }
-    })
 
     // set the bot's activity to be displayed as /help
     bot.user.setActivity("/help", { type: "PLAYING" });
@@ -183,152 +172,162 @@ bot.on("interactionCreate", async interaction => {
     }
     const { commandName, options } = interaction;
 
-    // define logic for slash commands
-    if (commandName === "add") {
-        const num1 = await options.getNumber("num1") || 0
-        const num2 = await options.getNumber("num2") || 0
+    // define logic for slash command with switch statement
+    switch (commandName) {
+        case "add": {
+            const num1 = await options.getNumber("num1") || 0
+            const num2 = await options.getNumber("num2") || 0
 
-        // create embed
-        const addEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`(${num1}) + (${num2}) = *(${num1 + num2})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+            // create embed
+            const addEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`(${num1}) + (${num2}) = *(${num1 + num2})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
-        // reply to the slash command with the embed
-        await interaction.reply({
-            embeds: [addEmbed]
-        })
-
-    } else if (commandName === "subtract") {
-        const num1 = await options.getNumber("num1") || 0
-        const num2 = await options.getNumber("num2") || 0
-        
-        const subtractEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`(${num1}) - (${num2}) = *(${num1 - num2})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-
-        await interaction.reply({
-            embeds: [subtractEmbed]
-        })
-
-    } else if (commandName === "multiply") {
-        const num1 = await options.getNumber("num1") || 0
-        const num2 = await options.getNumber("num2") || 0
-        
-        const multiplyEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`(${num1}) x (${num2}) = *(${num1 * num2})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-
-        await interaction.reply({
-            embeds: [multiplyEmbed]
-        })
-
-    } else if (commandName === "divide") {
-        const num1 = await options.getNumber("num1") || 0
-        const num2 = await options.getNumber("num2") || 0
-        
-        const devideEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`(${num1}) / (${num2}) = *(${num1 / num2})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-
-        await interaction.reply({
-            embeds: [devideEmbed]
-        })
-
-    } else if (commandName === "percentage_of") {
-        const num1 = await options.getNumber("percent") || 0
-        const num2 = await options.getNumber("num1") || 0
-        // percentage of = % / 100 * num
-        const i = num1 / 100;
-        
-        const percentageOfEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`(${num1}%) of (${num2}) is *(${i * num2})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-
-        await interaction.reply({
-            embeds: [percentageOfEmbed]
-        })
-
-    } else if (commandName === "help") {
-        const helpEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle("Calc 101")
-        .setDescription("Calc is a Discord bot designed to perform simple arithmetic")
-        .addFields(
-            {name: "\u200B", value: "\n\u200b"},
-            {name: "Calling commands", value: "Calc utilizes Discord slash commands for each of it's commands, see the following list for an overview of each command"},
-            {name: "/add", value: "adds two numbers", inline: true},
-            {name: "/subtract", value: "subtracts two numbers", inline: true},
-            {name: "/multiply", value: "multiplies two numbers", inline: true},
-            {name: "/divide", value: "divides two numbers", inline: true},
-            {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
-            {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true},
-            {name: "/power", value: "returns the base raised to the power", inline: true}
-        )
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-        .setImage("https://i.postimg.cc/Kjy5Mnc8/Calc-bot-banner.png")
-
-        await interaction.reply({
-            embeds: [helpEmbed] 
-        })
-
-    } else if (commandName === "square_root") {
-        const num1 = await options.getNumber("num1") || 0
-        const num2 = await options.getBoolean("round_to_nearest_int") || 0
-        // calculate the square root of num1
-        const sqrtOfNum1 = await Math.sqrt(num1);
-
-        // embed for returning the square root
-        const square_rootEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`the square root of (${num1}) is *(${sqrtOfNum1})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-
-        // embed for returning the square root rounded to the nearest integer
-        const square_root_roundedEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`the square root of (${num1}) rounded to the nearest integer is *(${Math.round(sqrtOfNum1)})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
-        
-        // if round_to_nearest_int is true
-        if (num2) {
+            // reply to the slash command with the embed
             await interaction.reply({
-                embeds: [square_root_roundedEmbed]
+                embeds: [addEmbed]
             })
-        // if round_to_nearest_int is false
-        } else {
-            await interaction.reply({
-                embeds: [square_rootEmbed]
-            })
+            break;
         }
+        case "subtract": {   
+            const num1 = await options.getNumber("num1") || 0
+            const num2 = await options.getNumber("num2") || 0
+                
+            const subtractEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`(${num1}) - (${num2}) = *(${num1 - num2})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+        
+            await interaction.reply({
+                embeds: [subtractEmbed]
+            })
+            break;
+        }
+        case "multiply": { 
+            const num1 = await options.getNumber("num1") || 0
+            const num2 = await options.getNumber("num2") || 0
+        
+            const multiplyEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`(${num1}) x (${num2}) = *(${num1 * num2})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
-    } else if (commandName === "power") {
-        const num1 = await options.getNumber("base") || 0
-        const num2 = await options.getNumber("exponent") || 0
+            await interaction.reply({
+                embeds: [multiplyEmbed]
+            })
+            break;
+        }
+        case "divide": {
+            const num1 = await options.getNumber("num1") || 0
+            const num2 = await options.getNumber("num2") || 0
+        
+            const devideEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`(${num1}) / (${num2}) = *(${num1 / num2})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
-        const powerEmbed = new MessageEmbed()
-        .setColor("#5CD4D8")
-        .setTitle(`(${num1}) raised to the power (${num2}) is *(${Math.pow(num1, num2)})*`)
-        .setTimestamp()
-        .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+            await interaction.reply({
+                embeds: [devideEmbed]
+            })
+            break;
+        }
+        case "percentage_of": {
+            const num1 = await options.getNumber("percent") || 0
+            const num2 = await options.getNumber("num1") || 0
+            // percentage of = % / 100 * num
+            const i = num1 / 100;
+        
+            const percentageOfEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`(${num1}%) of (${num2}) is *(${i * num2})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
-        await interaction.reply({
-            embeds: [powerEmbed] 
-        })
+            await interaction.reply({
+                embeds: [percentageOfEmbed]
+            })
+            break;
+        }
+        case "help": { 
+            const helpEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle("Calc 101")
+            .setDescription("Calc is a Discord bot designed to perform simple arithmetic")
+            .addFields(
+                {name: "\u200B", value: "\n\u200b"},
+                {name: "Calling commands", value: "Calc utilizes Discord slash commands for each of it's commands, see the following list for an overview of each command"},
+                {name: "/add", value: "adds two numbers", inline: true},
+                {name: "/subtract", value: "subtracts two numbers", inline: true},
+                {name: "/multiply", value: "multiplies two numbers", inline: true},
+                {name: "/divide", value: "divides two numbers", inline: true},
+                {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
+                {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true},
+                {name: "/power", value: "returns the base raised to the power", inline: true}
+            )
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+            .setImage("https://i.postimg.cc/Kjy5Mnc8/Calc-bot-banner.png")
+
+            await interaction.reply({
+                embeds: [helpEmbed] 
+            })
+            break;
+        }
+        case "square_root": {
+            const num1 = await options.getNumber("num1") || 0
+            const num2 = await options.getBoolean("round_to_nearest_int") || 0
+            // calculate the square root of num1
+            const sqrtOfNum1 = await Math.sqrt(num1);
+
+            // embed for returning the square root
+            const square_rootEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`the square root of (${num1}) is *(${sqrtOfNum1})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+            // embed for returning the square root rounded to the nearest integer
+            const square_root_roundedEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`the square root of (${num1}) rounded to the nearest integer is *(${Math.round(sqrtOfNum1)})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+        
+            // if round_to_nearest_int is true
+            if (num2) {
+                await interaction.reply({
+                    embeds: [square_root_roundedEmbed]
+                })
+            // if round_to_nearest_int is false
+            } else {
+                await interaction.reply({
+                    embeds: [square_rootEmbed]
+                })
+            }
+            break;
+        }
+        case "power": {
+            const num1 = await options.getNumber("base") || 0
+            const num2 = await options.getNumber("exponent") || 0
+
+            const powerEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`(${num1}) raised to the power (${num2}) is *(${Math.pow(num1, num2)})*`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+            await interaction.reply({
+                embeds: [powerEmbed] 
+            })
+            break;
+        }       
     }
-})
+ })
 
 // login to discord using the bot token
 bot.login(process.env.TOKEN);
