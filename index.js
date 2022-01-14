@@ -273,7 +273,7 @@ bot.on("interactionCreate", async interaction => {
         case "help": { 
             const helpEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
-            .setTitle("Calc 101")
+            .setTitle("Calc Guide")
             .setDescription("Calc is a Discord bot designed to perform simple arithmetic")
             .addFields(
                 {name: "\u200B", value: "\n\u200b"},
@@ -284,7 +284,8 @@ bot.on("interactionCreate", async interaction => {
                 {name: "/divide", value: "divides two numbers", inline: true},
                 {name: "/percentage_of", value: "calculates the percentage of a number", inline: true},
                 {name: "/square_root", value: "returns the square root of a number, answer can be rounded to the nearest integer", inline: true},
-                {name: "/power", value: "returns the base raised to the power", inline: true}
+                {name: "/power", value: "returns the base raised to the power", inline: true},
+                {name: "/percent_change", value: "calculates the percent chance between two numbers", inline: true}
             )
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
@@ -356,15 +357,15 @@ bot.on("interactionCreate", async interaction => {
 
             // save the result the increaseOrDecrease
             if (newNum > oldNum) {
-                increaseOrDecrease = "an increase";
+                increaseOrDecrease = "+";
 
             } else {
-                increaseOrDecrease = "a decrease";
+                increaseOrDecrease = "";
             }
 
             const percentChangeEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
-            .setTitle(`the percent change between (${oldNum}) and (${newNum}) is ${increaseOrDecrease} of (${x * 100}%)`)
+            .setTitle(`the percent change between (${oldNum}) and (${newNum}) is (${increaseOrDecrease}${x * 100}%)`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
