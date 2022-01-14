@@ -147,7 +147,7 @@ bot.on("ready", async () => {
     // construct powers slash command
     commands?.create({
         name: "power",
-        description: "returns the base to the exponent",
+        description: "calculates the base raised to the exponent",
         options: [{
             name: "base",
             description: "the base number",
@@ -157,6 +157,23 @@ bot.on("ready", async () => {
         {
             name: "exponent",
             description: "the exponent",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        }]
+    })
+    // construct percentage change slash command
+    commands?.create({
+        name: "percent_change",
+        description: "calculates the percent change",
+        options: [{
+            name: "old_value",
+            description: "the original value of a number",
+            required: true,
+            type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
+        },
+        {
+            name: "new_value",
+            description: "the updated value of the old value",
             required: true,
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
@@ -237,14 +254,14 @@ bot.on("interactionCreate", async interaction => {
             break;
         }
         case "percentage_of": {
-            const num1 = await options.getNumber("percent") || 0
-            const num2 = await options.getNumber("num1") || 0
+            const percent = await options.getNumber("percent") || 0
+            const num1 = await options.getNumber("num1") || 0
             // percentage of = % / 100 * num
-            const i = num1 / 100;
+            const i = await percent / 100;
         
             const percentageOfEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
-            .setTitle(`(${num1}%) of (${num2}) is *(${i * num2})*`)
+            .setTitle(`(${percent}%) of (${num1}) is *(${i * num1})*`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
@@ -280,33 +297,33 @@ bot.on("interactionCreate", async interaction => {
         }
         case "square_root": {
             const num1 = await options.getNumber("num1") || 0
-            const num2 = await options.getBoolean("round_to_nearest_int") || 0
+            const round = await options.getBoolean("round_to_nearest_int") || 0
             // calculate the square root of num1
             const sqrtOfNum1 = await Math.sqrt(num1);
 
             // embed for returning the square root
-            const square_rootEmbed = new MessageEmbed()
+            const squareRootEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
             .setTitle(`the square root of (${num1}) is *(${sqrtOfNum1})*`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
             // embed for returning the square root rounded to the nearest integer
-            const square_root_roundedEmbed = new MessageEmbed()
+            const squareRootRoundedEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
             .setTitle(`the square root of (${num1}) rounded to the nearest integer is *(${Math.round(sqrtOfNum1)})*`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
         
             // if round_to_nearest_int is true
-            if (num2) {
+            if (round) {
                 await interaction.reply({
-                    embeds: [square_root_roundedEmbed]
+                    embeds: [squareRootRoundedEmbed]
                 })
             // if round_to_nearest_int is false
             } else {
                 await interaction.reply({
-                    embeds: [square_rootEmbed]
+                    embeds: [squareRootEmbed]
                 })
             }
             break;
@@ -325,7 +342,37 @@ bot.on("interactionCreate", async interaction => {
                 embeds: [powerEmbed] 
             })
             break;
-        }       
+        }
+        case "percent_change": {
+            // formula for percent change = new value - old value / old value x 100
+            const oldNum = await options.getNumber("old_value") || 0
+            const newNum = await options.getNumber("new_value") || 0
+            // subtract the old value from the new value
+            const i = await newNum - oldNum;
+            // divide i by the old value
+            const x = await i / oldNum;
+            // declare empty variable to store whether or not the percent change is an increase or a decrease
+            let increaseOrDecrease;
+
+            // save the result the increaseOrDecrease
+            if (newNum > oldNum) {
+                increaseOrDecrease = "an increase";
+
+            } else {
+                increaseOrDecrease = "a decrease";
+            }
+
+            const percentChangeEmbed = new MessageEmbed()
+            .setColor("#5CD4D8")
+            .setTitle(`the percent change between (${oldNum}) and (${newNum}) is ${increaseOrDecrease} of (${x * 100}%)`)
+            .setTimestamp()
+            .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
+
+            await interaction.reply({
+                embeds: [percentChangeEmbed]
+            })
+            break;
+        }    
     }
  })
 
