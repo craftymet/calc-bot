@@ -116,7 +116,7 @@ bot.on("ready", async () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         },
         {
-            name: "num1",
+            name: "num",
             description: "the number you're calculating the percentage of",
             required: true,
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
@@ -132,7 +132,7 @@ bot.on("ready", async () => {
         name: "square_root",
         description: "finds the square root of a number",
         options: [{
-            name: "num1",
+            name: "num",
             description: "the number you're calculating the square root of",
             required: true,
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
@@ -173,7 +173,7 @@ bot.on("ready", async () => {
         },
         {
             name: "new_value",
-            description: "the updated value of the old value",
+            description: "the updated value of the original number",
             required: true,
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
@@ -255,13 +255,13 @@ bot.on("interactionCreate", async interaction => {
         }
         case "percentage_of": {
             const percent = await options.getNumber("percent") || 0
-            const num1 = await options.getNumber("num1") || 0
+            const num = await options.getNumber("num") || 0
             // percentage of = % / 100 * num
             const i = await percent / 100;
         
             const percentageOfEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
-            .setTitle(`(${percent}%) of (${num1}) is *(${i * num1})*`)
+            .setTitle(`(${percent}%) of (${num}) is *(${i * num})*`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
@@ -297,22 +297,22 @@ bot.on("interactionCreate", async interaction => {
             break;
         }
         case "square_root": {
-            const num1 = await options.getNumber("num1") || 0
+            const num = await options.getNumber("num") || 0
             const round = await options.getBoolean("round_to_nearest_int") || 0
             // calculate the square root of num1
-            const sqrtOfNum1 = await Math.sqrt(num1);
+            const sqrtOfNum = await Math.sqrt(num);
 
             // embed for returning the square root
             const squareRootEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
-            .setTitle(`the square root of (${num1}) is *(${sqrtOfNum1})*`)
+            .setTitle(`the square root of (${num}) is *(${sqrtOfNum})*`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
             // embed for returning the square root rounded to the nearest integer
             const squareRootRoundedEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
-            .setTitle(`the square root of (${num1}) rounded to the nearest integer is *(${Math.round(sqrtOfNum1)})*`)
+            .setTitle(`the square root of (${num}) rounded to the nearest integer is *(${Math.round(sqrtOfNum)})*`)
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
         
