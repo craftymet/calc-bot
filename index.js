@@ -105,7 +105,7 @@ bot.on("ready", async () => {
             type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
         }]
     })
-    // construct % of slash command
+    // construct percentage of slash command
     commands?.create({
         name: "percentage_of",
         description: "calculates percentage of",
