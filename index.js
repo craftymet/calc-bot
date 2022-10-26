@@ -309,7 +309,7 @@ bot.on("interactionCreate", async interaction => {
             .setTimestamp()
             .setAuthor({name: "Calc", iconURL: "https://i.postimg.cc/ZRvbXNSZ/Screen-Shot-2022-01-08-at-1-52-37-PM.png"})
 
-            // embed for returning the square root rounded to the nearest integer
+            // embed for returning square root rounded to nearest integer
             const squareRootRoundedEmbed = new MessageEmbed()
             .setColor("#5CD4D8")
             .setTitle(`the square root of (${num}) rounded to the nearest integer is *(${Math.round(sqrtOfNum)})*`)
